@@ -32,6 +32,11 @@ export default function Authority() {
       </Typography>
       <Divider />
       <Box sx={{ py: "1rem", display: "flex", justifyContent: "space-around" }}>
+        <CardCataloguing
+          name="Importar Registros"
+          link="/admin/authority/importation"
+          Icon={PersonAdd}
+        />
       <CardCataloguing
           name="Nome Pessoal"
           link="/admin/cataloguing/book"
