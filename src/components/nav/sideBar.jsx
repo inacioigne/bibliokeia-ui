@@ -108,7 +108,7 @@ export default function SideBar({ open }) {
         {menuLinks.map((link) => {
           const isActive = pathname === link.href;
           return (
-            <Link href={link.href} key={link.name}>
+            <Link href={link.href} key={link.label}>
               <MenuItem sx={isActive ? styleMenuActive : styleMenu}>
                 <ListItemIcon>
                   {link.icon}
