@@ -10,4 +10,4 @@ function search() {
     return api;
   }
   
-export const ApiLoc = search()
+export const loc = search()

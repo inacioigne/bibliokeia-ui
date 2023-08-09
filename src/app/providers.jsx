@@ -43,8 +43,15 @@ export default function Providers({ children }) {
 
   return (
     <>
-      <LinearProgress sx={ progress ? { //position: "absolute", 
-      zIndex: 2000 } : { display: "none" }  } />
+      <LinearProgress
+        sx={
+          progress
+            ? {
+                zIndex: 2000,
+              }
+            : { display: "none" }
+        }
+      />
       <Snackbar open={openSnack} autoHideDuration={6000} onClose={handleSnack}>
         <Alert
           onClose={handleSnack}
