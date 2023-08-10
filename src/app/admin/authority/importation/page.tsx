@@ -17,13 +17,18 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
+  Card,
+  CardContent,
+  CardHeader,
+  Avatar,
 } from "@mui/material";
 
 // MUI Icons
 import { PersonAdd, Home, Search } from "@mui/icons-material/";
+import { red } from "@mui/material/colors";
 
 // react-hook-form
-import { useForm, Controller, SubmitHandler } from "react-hook-form";
+// import { useForm, Controller, SubmitHandler } from "react-hook-form";
 
 // BiblioKeia Components
 import BreadcrumbsBK from "src/components/nav/breadcrumbs";
@@ -31,6 +36,9 @@ import CardCataloguing from "src/components/cards/cardCataloguing";
 
 // BiblioKeia Services
 import { loc } from "src/services/loc";
+import { api } from "src/services/api";
+
+// React Hooks
 import { useState } from "react";
 
 const previousPaths = [
@@ -47,17 +55,17 @@ const previousPaths = [
 ];
 
 export default function Authority() {
-  const { control, handleSubmit } = useForm();
+  // const { control, handleSubmit } = useForm();
   const [type, setType] = useState("all");
   const [search, setSearch] = useState("");
   const [hits, setHits] = useState([]);
+  const [agent, setAgent] = useState(null);
 
   const getData = (search, type) => {
     let params = {
       q: `${search}`,
       count: 10,
     };
-
     if (type != "all") {
       params["rdftype"] = type;
     }
@@ -67,7 +75,6 @@ export default function Authority() {
           params: params,
         })
         .then((response) => {
-          console.log(response.data.hits);
           setHits(response.data.hits);
         })
         .catch(function (error) {
@@ -75,19 +82,26 @@ export default function Authority() {
         });
     } else {
       setHits([]);
-      console.log("SEM BUSCHA");
+      setAgent(null);
     }
+  };
+
+  const postImport = (uri) => {
+    api
+      .get(`/import/loc/agents?uri=${uri}`)
+      .then((response) => {
+        console.log(response.data.authoritativeLabel);
+        setAgent(response.data);
+      })
+      .catch(function (error) {
+        console.log("ERROOO!!", error);
+      });
   };
 
   const handleChangeType = (event: SelectChangeEvent) => {
     setType(event.target.value as string);
     getData(search, event.target.value);
   };
-
-  // const onSubmit = (data) => {
-  //   // console.log(data.search);
-  //   getData(data.search, "type");
-  // };
 
   return (
     <Container maxWidth="xl">
@@ -99,11 +113,11 @@ export default function Authority() {
       </Typography>
       <Divider />
       <Grid container spacing={2}>
-        <Grid item xs={6}>
+        <Grid item xs={5} sx={{ mt: "15px" }}>
           <form>
             <Box
               sx={{
-                m: "10px",
+                // m: "10px",
                 display: "flex",
                 flexDirection: "column",
                 gap: "8px",
@@ -153,18 +167,44 @@ export default function Authority() {
               />
             </Box>
           </form>
-
           <nav aria-label="secondary mailbox folders">
             <List>
               {hits?.map((hit, index) => (
                 <ListItem disablePadding key={index}>
-                  <ListItemButton>
+                  <ListItemButton
+                    onClick={(e) => {
+                      console.log(hit.uri);
+                      postImport(hit.uri);
+                    }}
+                  >
                     <ListItemText primary={hit.aLabel} secondary={hit.uri} />
                   </ListItemButton>
                 </ListItem>
               ))}
             </List>
           </nav>
+        </Grid>
+        <Grid item xs={7} sx={{ mt: "15px" }}>
+          {agent && (
+            <Card variant="outlined">
+              <CardContent>
+                <CardHeader
+                  avatar={
+                    <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+                      {agent.authoritativeLabel[0]}
+                    </Avatar>
+                  }
+                  title={
+                    <Typography variant="h5" component="div">
+                      {agent.authoritativeLabel}
+                    </Typography>
+                  }
+                  // subheader="September 14, 2016"
+                />
+                <Divider />
+              </CardContent>
+            </Card>
+          )}
         </Grid>
       </Grid>
     </Container>
