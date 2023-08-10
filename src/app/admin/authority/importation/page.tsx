@@ -109,9 +109,21 @@ export default function Authority() {
         <BreadcrumbsBK previousPaths={previousPaths} currentPath="Importação" />
       </Box>
       <Typography variant="h4" gutterBottom>
-        Importar Autoridades - Library of Congress
+        Importar Autoridades 
       </Typography>
       <Divider />
+      <Box sx={{ py: "1rem", display: "flex", justifyContent: "space-around" }}>
+        <CardCataloguing
+          name="Library of Congress Names - LCNAF"
+          link="/admin/authority/importation"
+          Icon={PersonAdd}
+        />
+      <CardCataloguing
+          name="Nome Pessoal"
+          link="/admin/cataloguing/book"
+          Icon={PersonAdd}
+        />
+      </Box>
       <Grid container spacing={2}>
         <Grid item xs={5} sx={{ mt: "15px" }}>
           <form>

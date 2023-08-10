@@ -28,12 +28,12 @@ export default function Authority() {
         />
       </Box>
       <Typography variant="h4" gutterBottom>
-        Criar Nova Autoridade
+        Autoridades
       </Typography>
       <Divider />
       <Box sx={{ py: "1rem", display: "flex", justifyContent: "space-around" }}>
         <CardCataloguing
-          name="Importar Registros"
+          name="Importar Autoridades"
           link="/admin/authority/importation"
           Icon={PersonAdd}
         />
