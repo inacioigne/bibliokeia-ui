@@ -24,6 +24,7 @@ export default function AdminLayout({ children }) {
           mt: "60px",
           width: "calc(100% - 260px)",
           height: "calc(100vh - 60px)",
+          overflow: "auto",
           flexGrow: 1,
           backgroundColor: "background.bgBk",
         }}

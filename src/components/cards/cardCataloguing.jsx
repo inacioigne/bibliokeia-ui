@@ -12,26 +12,23 @@ export default function CardCataloguing({ name, link, Icon }) {
         width: 230,
       }}
     >
-      <CardContent>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          Template
-        </Typography>
-        <Typography variant="h5" component="div" sx={{ textAlign: "center" }}>
-          {name}
-        </Typography>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
-          <Link href={link}>
+      <Link href={link}>
+        <CardContent>
+          <Typography variant="h5" component="div" sx={{ textAlign: "center" }}>
+            {name}
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
             <IconButton color="primary">
               <Icon sx={{ fontSize: 50 }} />
             </IconButton>
-          </Link>
-        </Box>
-      </CardContent>
+          </Box>
+        </CardContent>
+      </Link>
     </Card>
   );
 }
