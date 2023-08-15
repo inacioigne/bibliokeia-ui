@@ -104,7 +104,7 @@ export default function SideBar({ open }) {
           BiblioKeia
         </Typography>
       </Box>
-      <MenuList>
+      <MenuList sx={{display: "flex", flexDirection: "column", gap: "8px"}}>
         {menuLinks.map((link) => {
           const isActive = pathname === link.href;
           return (
