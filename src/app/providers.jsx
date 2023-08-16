@@ -2,6 +2,7 @@
 // Mui
 import { LinearProgress, Snackbar } from "@mui/material/";
 import MuiAlert from "@mui/material/Alert";
+import { red } from '@mui/material/colors';
 
 // Providers BiblioKeia
 import { useProgress } from "src/providers/progress";
@@ -44,6 +45,7 @@ export default function Providers({ children }) {
   return (
     <>
       <LinearProgress
+      color="error"
         sx={
           progress
             ? {

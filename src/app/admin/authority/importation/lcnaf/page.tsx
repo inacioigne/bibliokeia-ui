@@ -24,10 +24,12 @@ import {
   Paper,
   Pagination,
   PaginationItem,
+  LinearProgress,
+  Tooltip,
 } from "@mui/material";
 
 // MUI Icons
-import { PersonAdd, Home, Search } from "@mui/icons-material/";
+import { PersonAdd, Home, Search, ImportExport } from "@mui/icons-material/";
 import { red } from "@mui/material/colors";
 
 // BiblioKeia Components
@@ -40,6 +42,9 @@ import { api } from "src/services/api";
 
 // React Hooks
 import { useState } from "react";
+
+// BiblioKeia Hooks
+import { useProgress } from "src/providers/progress";
 
 const previousPaths = [
   {
@@ -68,27 +73,35 @@ export default function Authority() {
   const itemsPerPage = 10;
   const totalItems = 100;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const [loading, setLoading] = useState(false);
+  const [loadingBK, setLoadingBK] = useState(false);
+
+  const { progress, setProgress, initProgress } = useProgress();
 
   const getData = (search, type, currentPage) => {
     let params = {
       q: `${search}`,
       count: 10,
-      offset: currentPage == 1 ? 1 : currentPage*10
+      offset: currentPage == 1 ? 1 : currentPage * 10,
     };
     if (type != "all") {
       params["rdftype"] = type;
     }
     if (search) {
+      setLoading(true);
       loc
         .get("authorities/names/suggest2/", {
           params: params,
         })
         .then((response) => {
-            console.log(response.data)
+          console.log(response.data);
           setHits(response.data.hits);
         })
         .catch(function (error) {
           console.log("ERROOO!!", error);
+        })
+        .finally(function () {
+          setLoading(false);
         });
     } else {
       setHits([]);
@@ -96,26 +109,30 @@ export default function Authority() {
     }
   };
 
-  const postImport = (uri) => {
+  const getImportBK = (uri) => {
+    setProgress(true);
     api
       .get(`/import/loc/agents?uri=${uri}`)
       .then((response) => {
-        console.log(response.data.authoritativeLabel);
+        console.log(response.data);
         setAgent(response.data);
       })
       .catch(function (error) {
         console.log("ERROOO!!", error);
+      })
+      .finally(function () {
+        setProgress(false);
       });
   };
 
   const handleChangeType = (event: SelectChangeEvent) => {
     setType(event.target.value as string);
     getData(search, event.target.value, currentPage);
-    console.log(hits.length)
+    console.log(hits.length);
   };
 
   const handlePageChange = (event, page) => {
-    setCurrentPage(page); 
+    setCurrentPage(page);
     getData(search, type, page);
   };
 
@@ -183,42 +200,60 @@ export default function Authority() {
             </Box>
           </form>
           <nav aria-label="secondary mailbox folders">
-            {hits.length > 0 ? (
+            {search && (
               <Paper elevation={3} sx={{ mb: "10px" }}>
-                <List>
-                  {hits?.map((hit, index) => (
-                    <ListItem disablePadding key={index}>
-                      <ListItemButton
-                        onClick={(e) => {
-                          console.log(hit.uri);
-                          postImport(hit.uri);
-                        }}
-                      >
-                        <ListItemText
-                          primary={hit.aLabel}
-                          secondary={hit.uri}
-                        />
-                      </ListItemButton>
-                    </ListItem>
-                  ))}
-                </List>
-                <Box
-                  sx={{ p: "15px", display: "flex", justifyContent: "center" }}
-                >
-                  <Pagination
-                  color="primary"
-                //   disabled={true}
-                    page={currentPage}
-                    count={totalPages}
-                    onChange={handlePageChange}
-                    renderItem={(item) => (
-                      <PaginationItem component="div" {...item} />
+                {loading ? (
+                  <LinearProgress />
+                ) : (
+                  <div>
+                    {hits.length > 0 ? (
+                      <div>
+                        <List>
+                          {hits?.map((hit, index) => (
+                            <ListItem disablePadding key={index}>
+                              <ListItemButton
+                                onClick={(e) => {
+                                  console.log(hit.uri);
+                                  getImportBK(hit.uri);
+                                }}
+                              >
+                                <ListItemText
+                                  primary={hit.aLabel}
+                                  secondary={hit.uri}
+                                />
+                              </ListItemButton>
+                              <LinearProgress />
+                            </ListItem>
+                          ))}
+                        </List>
+                        <Box
+                          sx={{
+                            p: "15px",
+                            display: "flex",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <Pagination
+                            color="primary"
+                            //   disabled={true}
+                            page={currentPage}
+                            count={totalPages}
+                            onChange={handlePageChange}
+                            renderItem={(item) => (
+                              <PaginationItem component="div" {...item} />
+                            )}
+                          />
+                        </Box>
+                      </div>
+                    ) : (
+                      <Typography variant="subtitle2" sx={{ p: "5px" }}>
+                        Nenhum resultado encontrado
+                      </Typography>
                     )}
-                  />
-                </Box>
+                  </div>
+                )}
               </Paper>
-            ): <Alert>Nenhum resultado encontrado</Alert>
-            }
+            )}
           </nav>
         </Grid>
         <Grid item xs={7} sx={{ mt: "15px" }}>
@@ -236,8 +271,23 @@ export default function Authority() {
                       {agent.authoritativeLabel}
                     </Typography>
                   }
+                  action={
+                    <Tooltip title="Import registro">
+                      <IconButton aria-label="settings">
+                        <ImportExport />
+                      </IconButton>
+                    </Tooltip>
+                  }
                 />
                 <Divider />
+                <Box>
+                  <Typography variant="subtitle2" gutterBottom>
+                    Nome completo:
+                  </Typography>
+                  <Typography variant="subtitle1" gutterBottom>
+                    {agent?.fullerName.elementValue.value}
+                  </Typography>
+                </Box>
               </CardContent>
             </Card>
           )}
