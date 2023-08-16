@@ -30,11 +30,11 @@ import {
 
 // MUI Icons
 import { PersonAdd, Home, Search, ImportExport } from "@mui/icons-material/";
-import { red } from "@mui/material/colors";
+
 
 // BiblioKeia Components
 import BreadcrumbsBK from "src/components/nav/breadcrumbs";
-// import CardCataloguing from "src/components/cards/cardCataloguing";
+import CardLCNAF from "src/components/cards/cardLCNAF";
 
 // BiblioKeia Services
 import { loc } from "src/services/loc";
@@ -66,7 +66,7 @@ const previousPaths = [
 
 export default function Authority() {
   const [type, setType] = useState("all");
-  const [search, setSearch] = useState(null);
+  const [search, setSearch] = useState("");
   const [hits, setHits] = useState([]);
   const [agent, setAgent] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -74,7 +74,7 @@ export default function Authority() {
   const totalItems = 100;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const [loading, setLoading] = useState(false);
-  const [loadingBK, setLoadingBK] = useState(false);
+  // const [loadingBK, setLoadingBK] = useState(false);
 
   const { progress, setProgress, initProgress } = useProgress();
 
@@ -258,38 +258,39 @@ export default function Authority() {
         </Grid>
         <Grid item xs={7} sx={{ mt: "15px" }}>
           {agent && (
-            <Card variant="outlined">
-              <CardContent>
-                <CardHeader
-                  avatar={
-                    <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                      {agent.authoritativeLabel[0]}
-                    </Avatar>
-                  }
-                  title={
-                    <Typography variant="h5" component="div">
-                      {agent.authoritativeLabel}
-                    </Typography>
-                  }
-                  action={
-                    <Tooltip title="Import registro">
-                      <IconButton aria-label="settings">
-                        <ImportExport />
-                      </IconButton>
-                    </Tooltip>
-                  }
-                />
-                <Divider />
-                <Box>
-                  <Typography variant="subtitle2" gutterBottom>
-                    Nome completo:
-                  </Typography>
-                  <Typography variant="subtitle1" gutterBottom>
-                    {agent?.fullerName.elementValue.value}
-                  </Typography>
-                </Box>
-              </CardContent>
-            </Card>
+            <CardLCNAF agent={agent} />
+            // <Card variant="outlined">
+            //   <CardContent>
+            //     <CardHeader
+            //       avatar={
+            //         <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+            //           {agent.authoritativeLabel[0]}
+            //         </Avatar>
+            //       }
+            //       title={
+            //         <Typography variant="h5" component="div">
+            //           {agent.authoritativeLabel}
+            //         </Typography>
+            //       }
+            //       action={
+            //         <Tooltip title="Import registro">
+            //           <IconButton aria-label="settings">
+            //             <ImportExport />
+            //           </IconButton>
+            //         </Tooltip>
+            //       }
+            //     />
+            //     <Divider />
+            //     <Box>
+            //       <Typography variant="subtitle2" gutterBottom>
+            //         Nome completo:
+            //       </Typography>
+            //       <Typography variant="subtitle1" gutterBottom>
+            //         {agent?.fullerName.elementValue.value}
+            //       </Typography>
+            //     </Box>
+            //   </CardContent>
+            // </Card>
           )}
         </Grid>
       </Grid>
