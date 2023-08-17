@@ -11,6 +11,7 @@ import {
   Tooltip,
   Divider,
   Stack,
+  Grid,
 } from "@mui/material";
 import { PersonAdd, Home, Search, ImportExport } from "@mui/icons-material/";
 import { red } from "@mui/material/colors";
@@ -42,31 +43,72 @@ export default function CardLCNAF({ agent }) {
           }
         />
         <Divider />
-        <Box sx={{ p: "10px" }}>
-          <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
-            Nome completo:
-          </Typography>
-          <Typography variant="subtitle1" gutterBottom>
-            {agent?.fullerName.elementValue.value}
-          </Typography>
-        </Box>
-        <Stack direction="row" spacing={2}>
-          <Box sx={{ backgroundColor: "blue" }}>
-            <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
-              Nascimento
-            </Typography>
-          </Box>
-          <Box>
-            <Typography variant="subtitle1" gutterBottom>
-              1839-06-21
-            </Typography>
-          </Box>
-          <Box>
-            <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
-              Falecimento
-            </Typography>
-          </Box>
-        </Stack>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Box sx={{ pt: "10px", pl: "10px" }}
+            >
+              <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
+                Nome completo:
+              </Typography>
+              <Typography variant="subtitle1" gutterBottom>
+                {agent?.fullerName.elementValue.value}
+              </Typography>
+            </Box>
+          </Grid>
+
+          <Grid item xs={6}>
+            <Box sx={{ pt: "10px", pl: "10px" }}
+            >
+              <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
+                Nascimento:
+              </Typography>
+              <Divider />
+
+              <Box sx={{ display: "flex" }}>
+                <Typography variant="subtitle1" gutterBottom>
+                  Local:
+                </Typography>
+                <Typography variant="subtitle1" gutterBottom>
+                  Rio de Janeiro
+                </Typography>
+              </Box>
+              <Box sx={{ display: "flex" }}>
+                <Typography variant="subtitle1" gutterBottom>
+                  Data:
+                </Typography>
+                <Typography variant="subtitle1" gutterBottom>
+                  1839-06-21
+                </Typography>
+              </Box>
+            </Box>
+          </Grid>
+
+          <Grid item xs={6}>
+            <Box sx={{ pt: "10px", pl: "10px" }}>
+              <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
+                Falecimento:
+              </Typography>
+              <Divider />
+
+              <Box sx={{ display: "flex" }}>
+                <Typography variant="subtitle1" gutterBottom>
+                  Local:
+                </Typography>
+                <Typography variant="subtitle1" gutterBottom>
+                  Rio de Janeiro
+                </Typography>
+              </Box>
+              <Box sx={{ display: "flex" }}>
+                <Typography variant="subtitle1" gutterBottom>
+                  Data:
+                </Typography>
+                <Typography variant="subtitle1" gutterBottom>
+                  1839-06-21
+                </Typography>
+              </Box>
+            </Box>
+          </Grid>
+        </Grid>
       </CardContent>
     </Card>
   );

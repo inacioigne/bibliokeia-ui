@@ -29,7 +29,7 @@ import {
 } from "@mui/material";
 
 // MUI Icons
-import { PersonAdd, Home, Search, ImportExport } from "@mui/icons-material/";
+import { PersonAdd, Home, Search } from "@mui/icons-material/";
 
 
 // BiblioKeia Components
@@ -74,7 +74,6 @@ export default function Authority() {
   const totalItems = 100;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const [loading, setLoading] = useState(false);
-  // const [loadingBK, setLoadingBK] = useState(false);
 
   const { progress, setProgress, initProgress } = useProgress();
 
@@ -94,7 +93,7 @@ export default function Authority() {
           params: params,
         })
         .then((response) => {
-          console.log(response.data);
+          // console.log(response.data);
           setHits(response.data.hits);
         })
         .catch(function (error) {
@@ -156,7 +155,8 @@ export default function Authority() {
               }}
             >
               <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">
+                <InputLabel id="demo-simple-select-label"
+                >
                   Selecione uma opção
                 </InputLabel>
                 <Select

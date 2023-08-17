@@ -10,7 +10,7 @@ import { AlertProvider } from "src/providers/alerts";
 
 import Providers from "src/app/providers";
 
-const inter = Inter({ subsets: ["latin"] });
+// const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -28,7 +28,8 @@ export default function RootLayout({
         <ModeProvider>
           <BfProvider>
             <AlertProvider>
-              <body className={inter.className}>
+              <body //className={inter.className}
+              >
                 <Providers />
                 {children}
               </body>
