@@ -10,14 +10,28 @@ import {
   Avatar,
   Tooltip,
   Divider,
-  Stack,
   Grid,
 } from "@mui/material";
+import TreeView from "@mui/lab/TreeView";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import TreeItem from "@mui/lab/TreeItem";
 import { PersonAdd, Home, Search, ImportExport } from "@mui/icons-material/";
 import { red } from "@mui/material/colors";
 
+// React Icons
+import { FaTreeCity } from "react-icons/fa6";
+import { LiaBirthdayCakeSolid } from "react-icons/lia";
+import { FcCalendar } from "react-icons/fc";
+
+// import { FaTreeCity } from 'react-icons/fa';
+// import { FaBeer } from 'react-icons/fa';
+
 // Next Components
 import Link from "next/link";
+
+// BiblioKeia Components
+import BtnIcon from "src/components/buttons/btnIcon";
 
 export default function CardLCNAF({ agent }) {
   return (
@@ -45,8 +59,7 @@ export default function CardLCNAF({ agent }) {
         <Divider />
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Box sx={{ pt: "10px", pl: "10px" }}
-            >
+            <Box sx={{ pt: "10px", pl: "10px" }}>
               <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
                 Nome completo:
               </Typography>
@@ -57,56 +70,61 @@ export default function CardLCNAF({ agent }) {
           </Grid>
 
           <Grid item xs={6}>
-            <Box sx={{ pt: "10px", pl: "10px" }}
-            >
+            <Box sx={{ pl: "10px" }}>
               <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
                 Nascimento:
               </Typography>
               <Divider />
-
-              <Box sx={{ display: "flex" }}>
-                <Typography variant="subtitle1" gutterBottom>
-                  Local:
-                </Typography>
-                <Typography variant="subtitle1" gutterBottom>
-                  Rio de Janeiro
-                </Typography>
+              <Box
+                sx={{ display: "flex", flexWrap: "wrap", gap: "5px", p: "5px" }}
+              >
+                {agent?.birthPlace && (
+                  <BtnIcon icon={<FaTreeCity />} label={"Rio de Janeiro"} />
+                )}
+                {agent?.birthDate && (
+                  <BtnIcon icon={<FcCalendar />} label={"1839-06-21"} />
+                )}
               </Box>
-              <Box sx={{ display: "flex" }}>
-                <Typography variant="subtitle1" gutterBottom>
-                  Data:
-                </Typography>
-                <Typography variant="subtitle1" gutterBottom>
-                  1839-06-21
-                </Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={6}>
+            <Box sx={{ pl: "10px" }}>
+              <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
+                Falecimento:
+              </Typography>
+              <Divider />
+              <Box
+                sx={{ display: "flex", flexWrap: "wrap", gap: "5px", p: "5px" }}
+              >
+                {agent?.deathPlace && (
+                  <BtnIcon icon={<FaTreeCity />} label={"Rio de Janeiro"} />
+                )}
+                {agent?.deathDate && (
+                  <BtnIcon icon={<FcCalendar />} label={"1839-06-21"} />
+                )}
               </Box>
             </Box>
           </Grid>
 
           <Grid item xs={6}>
-            <Box sx={{ pt: "10px", pl: "10px" }}>
-              <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
-                Falecimento:
-              </Typography>
-              <Divider />
+            <TreeView
+              aria-label="file system navigator"
+              defaultCollapseIcon={<ExpandMoreIcon />}
+              defaultExpandIcon={<ChevronRightIcon />}
+              sx={{
+                height: 240,
+                flexGrow: 1,
+                maxWidth: 400,
+                overflowY: "auto",
+              }}
+            >
+              <TreeItem nodeId="1" label="Variantes do Nome">
+                {agent?.hasVariant.map((variant, index) => (
+                   <TreeItem nodeId={index} label={variant.type} />
 
-              <Box sx={{ display: "flex" }}>
-                <Typography variant="subtitle1" gutterBottom>
-                  Local:
-                </Typography>
-                <Typography variant="subtitle1" gutterBottom>
-                  Rio de Janeiro
-                </Typography>
-              </Box>
-              <Box sx={{ display: "flex" }}>
-                <Typography variant="subtitle1" gutterBottom>
-                  Data:
-                </Typography>
-                <Typography variant="subtitle1" gutterBottom>
-                  1839-06-21
-                </Typography>
-              </Box>
-            </Box>
+                ))}
+              </TreeItem>
+            </TreeView>
           </Grid>
         </Grid>
       </CardContent>

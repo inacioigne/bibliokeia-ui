@@ -93,7 +93,6 @@ export default function Authority() {
           params: params,
         })
         .then((response) => {
-          // console.log(response.data);
           setHits(response.data.hits);
         })
         .catch(function (error) {
@@ -113,8 +112,8 @@ export default function Authority() {
     api
       .get(`/import/loc/agents?uri=${uri}`)
       .then((response) => {
-        console.log(response.data);
         setAgent(response.data);
+        console.log(response.data.hasVariant)
       })
       .catch(function (error) {
         console.log("ERROOO!!", error);
@@ -127,7 +126,6 @@ export default function Authority() {
   const handleChangeType = (event: SelectChangeEvent) => {
     setType(event.target.value as string);
     getData(search, event.target.value, currentPage);
-    console.log(hits.length);
   };
 
   const handlePageChange = (event, page) => {
@@ -213,7 +211,6 @@ export default function Authority() {
                             <ListItem disablePadding key={index}>
                               <ListItemButton
                                 onClick={(e) => {
-                                  console.log(hit.uri);
                                   getImportBK(hit.uri);
                                 }}
                               >
@@ -259,38 +256,6 @@ export default function Authority() {
         <Grid item xs={7} sx={{ mt: "15px" }}>
           {agent && (
             <CardLCNAF agent={agent} />
-            // <Card variant="outlined">
-            //   <CardContent>
-            //     <CardHeader
-            //       avatar={
-            //         <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            //           {agent.authoritativeLabel[0]}
-            //         </Avatar>
-            //       }
-            //       title={
-            //         <Typography variant="h5" component="div">
-            //           {agent.authoritativeLabel}
-            //         </Typography>
-            //       }
-            //       action={
-            //         <Tooltip title="Import registro">
-            //           <IconButton aria-label="settings">
-            //             <ImportExport />
-            //           </IconButton>
-            //         </Tooltip>
-            //       }
-            //     />
-            //     <Divider />
-            //     <Box>
-            //       <Typography variant="subtitle2" gutterBottom>
-            //         Nome completo:
-            //       </Typography>
-            //       <Typography variant="subtitle1" gutterBottom>
-            //         {agent?.fullerName.elementValue.value}
-            //       </Typography>
-            //     </Box>
-            //   </CardContent>
-            // </Card>
           )}
         </Grid>
       </Grid>
