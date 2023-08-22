@@ -113,7 +113,7 @@ export default function Authority() {
       .get(`/import/loc/agents?uri=${uri}`)
       .then((response) => {
         setAgent(response.data);
-        console.log(response.data.hasVariant)
+        console.log(response.data.hasAffiliation)
       })
       .catch(function (error) {
         console.log("ERROOO!!", error);
