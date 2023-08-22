@@ -24,9 +24,6 @@ import { FaTreeCity } from "react-icons/fa6";
 import { LiaBirthdayCakeSolid } from "react-icons/lia";
 import { FcCalendar } from "react-icons/fc";
 
-// import { FaTreeCity } from 'react-icons/fa';
-// import { FaBeer } from 'react-icons/fa';
-
 // Next Components
 import Link from "next/link";
 
@@ -119,13 +116,28 @@ export default function CardLCNAF({ agent }) {
               }}
             >
               <TreeItem nodeId="1" label="Variantes do Nome">
-                {agent?.hasVariant.map((variant, index) => (
-                   <TreeItem nodeId={index} label={variant.type} />
-
+                {agent.hasVariant.map((variant, index) => (
+                  <TreeItem
+                    key={index}
+                    nodeId={"2"}
+                    label={`${variant.elementList[0].elementValue.value}${variant.elementList[1].elementValue.value}`}
+                  />
                 ))}
               </TreeItem>
             </TreeView>
           </Grid>
+          {/* <Grid item xs={6}>
+            <code>variant</code>
+            <Box sx={{ display: "flex", flexDirection: "column" }}>
+              {agent?.hasVariant.map((variant, index) => (
+                <div key={index}>
+                  {variant.elementList.map((element, index) => (
+                    <code key={index}>{element.elementValue.value}</code>
+                  ))}
+                </div>
+              ))}
+            </Box>
+          </Grid> */}
         </Grid>
       </CardContent>
     </Card>
