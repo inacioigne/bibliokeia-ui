@@ -1,9 +1,9 @@
 import IconButton from '@mui/material/IconButton';
 
-export default function LogoWikidata() {
+export default function LogoWordcat() {
   return (
    <IconButton>
-    <img src="/logos/wikidata.png" alt="wikidata" />
+    <img src="/logos/worldcat.png" alt="worldcat" />
    </IconButton>
   );
 }
