@@ -12,7 +12,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, forwardRef } from "react";
 
 // BiblioKeia Hooks
-import { useAlertBK } from "src/providers/alerts";
+import { useAlert } from "src/providers/alerts";
 
 export default function Providers({ children }) {
   const { progress, setProgress } = useProgress();
@@ -25,7 +25,7 @@ export default function Providers({ children }) {
     // setMessage,
     typeAlert,
     // setTypeAlert,
-  } = useAlertBK();
+  } = useAlert();
 
   useEffect(() => {
     setProgress(false);

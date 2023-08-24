@@ -11,8 +11,8 @@ export const AlertProvider = ({ children }) => {
   return (
     <AlertContext.Provider
       value={{
-        openSnack,
-        setOpenSnack,
+        openSnack, 
+        setOpenSnack, 
         message,
         setMessage,
         typeAlert,
@@ -24,4 +24,4 @@ export const AlertProvider = ({ children }) => {
   );
 };
 
-export const useAlertBK = () => useContext(AlertContext);
+export const useAlert = () => useContext(AlertContext);

@@ -20,6 +20,9 @@ import TreeItem from "@mui/lab/TreeItem";
 import { TreeItemProps, treeItemClasses } from "@mui/lab/TreeItem";
 import LogoWikidata from "src/components/logos/wikidata";
 import LogoWordcat from "src/components/logos/worldcat";
+import LogoGetty from "src/components/logos/getty";
+import LogoBne from "src/components/logos/bne";
+
 import Link from "next/link";
 
 const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
@@ -103,6 +106,8 @@ export default function HasCloseExternalAuthority({
   const logos = {
     "www.wikidata.org": LogoWikidata,
     "id.worldcat.org": LogoWordcat,
+    "vocab.getty.edu": LogoGetty,
+    "datos.bne.es": LogoBne
   };
 
   return (

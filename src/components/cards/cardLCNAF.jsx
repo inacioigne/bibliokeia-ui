@@ -15,32 +15,68 @@ import {
 import TreeView from "@mui/lab/TreeView";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+// import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+// import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import TreeItem from "@mui/lab/TreeItem";
 import { PersonAdd, Home, Search, ImportExport } from "@mui/icons-material/";
 import { red } from "@mui/material/colors";
-import { styled, useTheme } from "@mui/material/styles";
-import { TreeItemProps, treeItemClasses } from "@mui/lab/TreeItem";
+
+// BiblioKeia Services
+import { api } from "src/services/api";
 
 // React Icons
 import { FaTreeCity } from "react-icons/fa6";
-import { LiaBirthdayCakeSolid } from "react-icons/lia";
 import { FcCalendar } from "react-icons/fc";
 
 // Next Components
-import Link from "next/link";
+// import Link from "next/link";
 
 // BiblioKeia Components
 import BtnIcon from "src/components/buttons/btnIcon";
 import CardAffiliation from "src/components/cards/cardAffiliation";
-import LogoWikidata from "src/components/logos/wikidata";
 import HasCloseExternalAuthority from "src/components/madsrdf/view/hasCloseExternalAuthority";
+import HasVariant from "src/components/madsrdf/view/hasVariant";
+import FieldOfActivity from "src/components/madsrdf/view/fieldOfActivity";
 
-// BiblioKeia Model
-// import { Agent } "src/models/agent"
+
+// BiblioKeia Hooks
+import { useProgress } from "src/providers/progress";
+import { useAlert } from "src/providers/alerts";
 
 export default function CardLCNAF({ agent }) {
+  const { progress, setProgress, initProgress } = useProgress();
+  const {
+    // openSnack,
+    setOpenSnack,
+    // message,
+    setMessage,
+    // typeAlert,
+    setTypeAlert,
+  } = useAlert();
+
+  const postImportBK = (agent) => {
+    // console.log(agent)
+    setProgress(true);
+    api
+      .post(`/authorities/agents/`, agent)
+      .then((response) => {
+          setTypeAlert("success");
+          setMessage("Registro importado com sucesso");
+          setOpenSnack(true);
+      })
+      .catch(function (error) {
+        if (error.response.status == 409) {
+          setTypeAlert("error");
+          setMessage(error.response.data.detail);
+          setOpenSnack(true);
+        } else {
+          console.log("ERROOO!!", error);
+        }
+      })
+      .finally(function () {
+        setProgress(false);
+      });
+  };
   return (
     <Card variant="outlined">
       <CardContent>
@@ -57,99 +93,91 @@ export default function CardLCNAF({ agent }) {
           }
           action={
             <Tooltip title="Import registro">
-              <IconButton aria-label="settings">
+              <IconButton aria-label="settings" onClick={() => {postImportBK(agent)}}>
                 <ImportExport />
               </IconButton>
             </Tooltip>
           }
         />
         <Divider />
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <Box sx={{ pt: "10px", pl: "10px" }}>
-              <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
-                Nome completo:
-              </Typography>
-              <Typography variant="subtitle1" gutterBottom>
-                {agent?.fullerName.elementValue.value}
-              </Typography>
-            </Box>
-          </Grid>
-
-          <Grid item xs={6}>
-            <Box sx={{ pl: "10px" }}>
-              <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
-                Nascimento:
-              </Typography>
-              <Divider />
-              <Box
-                sx={{ display: "flex", flexWrap: "wrap", gap: "5px", p: "5px" }}
-              >
-                {agent?.birthPlace && (
-                  <BtnIcon icon={<FaTreeCity />} label={"Rio de Janeiro"} />
-                )}
-                {agent?.birthDate && (
-                  <BtnIcon icon={<FcCalendar />} label={"1839-06-21"} />
-                )}
-              </Box>
-            </Box>
-          </Grid>
-          <Grid item xs={6}>
-            <Box sx={{ pl: "10px" }}>
-              <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
-                Falecimento:
-              </Typography>
-              <Divider />
-              <Box
-                sx={{ display: "flex", flexWrap: "wrap", gap: "5px", p: "5px" }}
-              >
-                {agent?.deathPlace && (
-                  <BtnIcon icon={<FaTreeCity />} label={"Rio de Janeiro"} />
-                )}
-                {agent?.deathDate && (
-                  <BtnIcon icon={<FcCalendar />} label={"1839-06-21"} />
-                )}
-              </Box>
-            </Box>
-          </Grid>
-
-          {agent?.hasVariant && (
-            <Grid item xs={6}>
+        <Grid container spacing={2} sx={{ mt: "5px" }}>
+          {/* fullerName */}
+          {agent?.fullerName && (
+            <Grid item xs={12}>
               <Box sx={{ pl: "10px" }}>
-                <TreeView
-                  aria-label="file system navigator"
-                  defaultCollapseIcon={<ExpandMoreIcon />}
-                  defaultExpandIcon={<ChevronRightIcon />}
-                  sx={{
-                    flexGrow: 1,
-                    maxWidth: 400,
-                    overflowY: "auto",
-                  }}
-                >
-                  <TreeItem
-                    nodeId="1"
-                    label={
-                      <Typography
-                        variant="subtitle2"
-                        sx={{ fontWeight: "bold" }}
-                      >
-                        Variantes do nome:
-                      </Typography>
-                    }
-                  >
-                    {agent.hasVariant.map((variant, index) => (
-                      <TreeItem
-                        key={index}
-                        nodeId={"2"}
-                        label={variant.variantLabel}
-                      />
-                    ))}
-                  </TreeItem>
-                </TreeView>
+                <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
+                  Nome completo:
+                </Typography>
+                <Typography variant="subtitle1" gutterBottom>
+                  {agent.fullerName?.elementValue.value}
+                </Typography>
               </Box>
             </Grid>
           )}
 
+          {/* Nascimento */}
+          {(agent?.birthPlace || agent?.birthDate) && (
+            <Grid item xs={6}>
+              <Box sx={{ pl: "10px" }}>
+                <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
+                  Nascimento:
+                </Typography>
+                <Divider />
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: "5px",
+                    p: "5px",
+                  }}
+                >
+                  {agent?.birthPlace && (
+                    <BtnIcon icon={<FaTreeCity />} label={agent.birthPlace} />
+                  )}
+                  {agent?.birthDate && (
+                    <BtnIcon icon={<FcCalendar />} label={agent.birthDate} />
+                  )}
+                </Box>
+              </Box>
+            </Grid>
+          )}
+
+          {/* Falecimento */}
+          {(agent?.deathPlace || agent?.deathDate) && (
+            <Grid item xs={6}>
+              <Box sx={{ pl: "10px" }}>
+                <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
+                  Falecimento:
+                </Typography>
+                <Divider />
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: "5px",
+                    p: "5px",
+                  }}
+                >
+                  {agent?.deathPlace && (
+                    <BtnIcon icon={<FaTreeCity />} label={agent.deathPlace} />
+                  )}
+                  {agent?.deathDate && (
+                    <BtnIcon icon={<FcCalendar />} label={agent.deathDate} />
+                  )}
+                </Box>
+              </Box>
+            </Grid>
+          )}
+
+          {/* hasVariant */}
+
+          {agent?.hasVariant && (
+            <Grid item xs={6}>
+              <HasVariant hasVariant={agent?.hasVariant} />
+            </Grid>
+          )}
+
+          {/* hasAffiliation */}
           {agent?.hasAffiliation && (
             <Grid item xs={6}>
               <Box sx={{ pl: "10px" }}>
@@ -162,6 +190,7 @@ export default function CardLCNAF({ agent }) {
               </Box>
             </Grid>
           )}
+
           {/* occupation */}
           {agent?.occupation && (
             <Grid item xs={6}>
@@ -199,6 +228,14 @@ export default function CardLCNAF({ agent }) {
               </Box>
             </Grid>
           )}
+
+          {/* fieldOfActivity */}
+          {agent?.fieldOfActivity && (
+            <Grid item xs={6}>
+              <FieldOfActivity fieldOfActivity={agent.fieldOfActivity} />
+            </Grid>
+          )}
+
           {/* hasCloseExternalAuthority */}
           {agent?.hasCloseExternalAuthority && (
             <Grid item xs={6}>

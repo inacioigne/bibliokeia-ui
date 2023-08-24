@@ -17,20 +17,19 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
-  Card,
-  CardContent,
-  CardHeader,
-  Avatar,
+  // Card,
+  // CardContent,
+  // CardHeader,
+  // Avatar,
   Paper,
   Pagination,
   PaginationItem,
   LinearProgress,
-  Tooltip,
+  Button,
 } from "@mui/material";
 
 // MUI Icons
 import { PersonAdd, Home, Search } from "@mui/icons-material/";
-
 
 // BiblioKeia Components
 import BreadcrumbsBK from "src/components/nav/breadcrumbs";
@@ -45,6 +44,7 @@ import { useState } from "react";
 
 // BiblioKeia Hooks
 import { useProgress } from "src/providers/progress";
+import { useAlert } from "src/providers/alerts";
 
 const previousPaths = [
   {
@@ -76,6 +76,14 @@ export default function Authority() {
   const [loading, setLoading] = useState(false);
 
   const { progress, setProgress, initProgress } = useProgress();
+  const {
+    openSnack,
+    setOpenSnack,
+    message,
+    setMessage,
+    typeAlert,
+    setTypeAlert,
+  } = useAlert();
 
   const getData = (search, type, currentPage) => {
     let params = {
@@ -113,10 +121,16 @@ export default function Authority() {
       .get(`/import/loc/agents?uri=${uri}`)
       .then((response) => {
         setAgent(response.data);
-        console.log(response.data.hasAffiliation)
+        console.log(response.data)
       })
       .catch(function (error) {
-        console.log("ERROOO!!", error);
+        if (error.response.status == 409) {
+          setTypeAlert("error");
+          setMessage(error.response.data.detail);
+          setOpenSnack(true);
+        } else {
+          console.log("ERROOO!!", error);
+        }
       })
       .finally(function () {
         setProgress(false);
@@ -141,6 +155,7 @@ export default function Authority() {
       <Typography variant="h4" gutterBottom>
         Library of Congress Names - LCNAF
       </Typography>
+
       <Divider />
       <Grid container spacing={2}>
         <Grid item xs={5} sx={{ mt: "15px" }}>
@@ -153,8 +168,7 @@ export default function Authority() {
               }}
             >
               <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label"
-                >
+                <InputLabel id="demo-simple-select-label">
                   Selecione uma opção
                 </InputLabel>
                 <Select
@@ -254,9 +268,7 @@ export default function Authority() {
           </nav>
         </Grid>
         <Grid item xs={7} sx={{ mt: "15px" }}>
-          {agent && (
-            <CardLCNAF agent={agent} />
-          )}
+          {agent && <CardLCNAF agent={agent} />}
         </Grid>
       </Grid>
     </Container>
