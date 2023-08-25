@@ -1,15 +1,10 @@
-"use client";
-// MUI Components
-import {
-  Typography,
-  Box,
-} from "@mui/material";
-import TreeView from "@mui/lab/TreeView";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import ArrowRightIcon from "@mui/icons-material/ArrowRight";
-import { styled, useTheme } from "@mui/material/styles";
-import TreeItem from "@mui/lab/TreeItem";
+import { Typography, Box } from "@mui/material";
+import { TreeView, TreeItem } from "@mui/lab/";
 import { TreeItemProps, treeItemClasses } from "@mui/lab/TreeItem";
+
+import { ArrowDropDown, ArrowRight } from "@mui/icons-material/";
+import { styled, useTheme } from "@mui/material/styles";
+
 import LogoWikidata from "src/components/logos/wikidata";
 import LogoWordcat from "src/components/logos/worldcat";
 import LogoGetty from "src/components/logos/getty";
@@ -54,7 +49,6 @@ function StyledTreeItem(props) {
     bgColor,
     color,
     labelIcon: LabelIcon,
-    // labelInfo,
     labelText,
     colorForDarkMode,
     bgColorForDarkMode,
@@ -95,19 +89,18 @@ function StyledTreeItem(props) {
 export default function HasCloseExternalAuthority({
   hasCloseExternalAuthority,
 }) {
-  const logos = {
-    "www.wikidata.org": LogoWikidata,
-    "id.worldcat.org": LogoWordcat,
-    "vocab.getty.edu": LogoGetty,
-    "datos.bne.es": LogoBne
-  };
-
+    const logos = {
+        "www.wikidata.org": LogoWikidata,
+        "id.worldcat.org": LogoWordcat,
+        "vocab.getty.edu": LogoGetty,
+        "datos.bne.es": LogoBne
+      };
   return (
     <TreeView
       aria-label="gmail"
       defaultExpanded={["3"]}
-      defaultCollapseIcon={<ArrowDropDownIcon />}
-      defaultExpandIcon={<ArrowRightIcon />}
+      defaultCollapseIcon={<ArrowDropDown />}
+      defaultExpandIcon={<ArrowRight />}
       defaultEndIcon={<div style={{ width: 24 }} />}
       sx={{
         flexGrow: 1,
@@ -117,10 +110,10 @@ export default function HasCloseExternalAuthority({
     >
       <StyledTreeItem
         nodeId="3"
-        labelText="Ocorrências similares em outras bases" //labelIcon={Label}
+        labelText="Ocorrências similares em outras bases"
       >
         {hasCloseExternalAuthority.map((authority, index) => (
-          <Link key={index} href={authority.value} target="_blank">
+          <Link key={index} href={"#"} target="_blank">
              <StyledTreeItem
               nodeId="5"
               labelText={authority.label}

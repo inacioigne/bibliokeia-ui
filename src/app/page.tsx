@@ -1,10 +1,15 @@
 // import Image from 'next/image'
 import styles from './page.module.css'
+import Container from '@mui/material/Container';
 
 export default function Home() {
   return (
     <main className={styles.main}>
-      <h1>BiblioKeia</h1>
+       <Container>
+       <h1>BiblioKeia</h1>
+
+       </Container>
+      
      
     </main>
   )

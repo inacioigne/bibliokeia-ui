@@ -15,10 +15,8 @@ import {
 import TreeView from "@mui/lab/TreeView";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-// import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-// import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import TreeItem from "@mui/lab/TreeItem";
-import { PersonAdd, Home, Search, ImportExport } from "@mui/icons-material/";
+import { ImportExport } from "@mui/icons-material/";
 import { red } from "@mui/material/colors";
 
 // BiblioKeia Services
@@ -28,9 +26,6 @@ import { api } from "src/services/api";
 import { FaTreeCity } from "react-icons/fa6";
 import { FcCalendar } from "react-icons/fc";
 
-// Next Components
-// import Link from "next/link";
-
 // BiblioKeia Components
 import BtnIcon from "src/components/buttons/btnIcon";
 import CardAffiliation from "src/components/cards/cardAffiliation";
@@ -38,12 +33,15 @@ import HasCloseExternalAuthority from "src/components/madsrdf/view/hasCloseExter
 import HasVariant from "src/components/madsrdf/view/hasVariant";
 import FieldOfActivity from "src/components/madsrdf/view/fieldOfActivity";
 
-
 // BiblioKeia Hooks
 import { useProgress } from "src/providers/progress";
 import { useAlert } from "src/providers/alerts";
 
+import { useRouter } from 'next/navigation'
+import { convertToObject } from "typescript";
+
 export default function CardLCNAF({ agent }) {
+  const router = useRouter()
   const { progress, setProgress, initProgress } = useProgress();
   const {
     // openSnack,
@@ -55,14 +53,15 @@ export default function CardLCNAF({ agent }) {
   } = useAlert();
 
   const postImportBK = (agent) => {
-    // console.log(agent)
+
     setProgress(true);
     api
       .post(`/authorities/agents/`, agent)
       .then((response) => {
-          setTypeAlert("success");
-          setMessage("Registro importado com sucesso");
-          setOpenSnack(true);
+        setTypeAlert("success");
+        setMessage("Registro importado com sucesso");
+        setOpenSnack(true);
+        router.replace(`/admin/authority?id=${response.data.id}`)
       })
       .catch(function (error) {
         if (error.response.status == 409) {
@@ -75,6 +74,8 @@ export default function CardLCNAF({ agent }) {
       })
       .finally(function () {
         setProgress(false);
+        
+
       });
   };
   return (
@@ -93,7 +94,12 @@ export default function CardLCNAF({ agent }) {
           }
           action={
             <Tooltip title="Import registro">
-              <IconButton aria-label="settings" onClick={() => {postImportBK(agent)}}>
+              <IconButton
+                aria-label="settings"
+                onClick={() => {
+                  postImportBK(agent);
+                }}
+              >
                 <ImportExport />
               </IconButton>
             </Tooltip>
@@ -170,7 +176,6 @@ export default function CardLCNAF({ agent }) {
           )}
 
           {/* hasVariant */}
-
           {agent?.hasVariant && (
             <Grid item xs={6}>
               <HasVariant hasVariant={agent?.hasVariant} />

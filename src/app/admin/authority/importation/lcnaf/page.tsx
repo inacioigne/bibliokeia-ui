@@ -17,15 +17,10 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
-  // Card,
-  // CardContent,
-  // CardHeader,
-  // Avatar,
   Paper,
   Pagination,
   PaginationItem,
   LinearProgress,
-  Button,
 } from "@mui/material";
 
 // MUI Icons
@@ -48,17 +43,17 @@ import { useAlert } from "src/providers/alerts";
 
 const previousPaths = [
   {
-    link: "admin",
+    link: "/admin",
     label: "Início",
     icon: <Home fontSize="small" />,
   },
   {
-    link: "authority",
+    link: "/admin/authority",
     label: "Autoridades",
     icon: <PersonAdd fontSize="small" />,
   },
   {
-    link: "importation",
+    link: "/admin/authority/importation",
     label: "Importação",
     icon: <PersonAdd fontSize="small" />,
   },
@@ -79,7 +74,7 @@ export default function Authority() {
   const {
     openSnack,
     setOpenSnack,
-    message,
+    message, 
     setMessage,
     typeAlert,
     setTypeAlert,
@@ -109,7 +104,7 @@ export default function Authority() {
         .finally(function () {
           setLoading(false);
         });
-    } else {
+    } else { 
       setHits([]);
       setAgent(null);
     }
@@ -121,7 +116,7 @@ export default function Authority() {
       .get(`/import/loc/agents?uri=${uri}`)
       .then((response) => {
         setAgent(response.data);
-        console.log(response.data)
+        // console.log(response.data);
       })
       .catch(function (error) {
         if (error.response.status == 409) {
