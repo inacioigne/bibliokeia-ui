@@ -28,10 +28,12 @@ import { FcCalendar } from "react-icons/fc";
 
 // BiblioKeia Components
 import BtnIcon from "src/components/buttons/btnIcon";
-import CardAffiliation from "src/components/cards/cardAffiliation";
+// import CardAffiliation from "src/components/cards/cardAffiliation";
 import HasCloseExternalAuthority from "src/components/madsrdf/view/hasCloseExternalAuthority";
 import HasVariant from "src/components/madsrdf/view/hasVariant";
 import FieldOfActivity from "src/components/madsrdf/view/fieldOfActivity";
+import HasAffiliation from "src/components/madsrdf/view/hasAffiliation";
+
 
 // BiblioKeia Hooks
 import { useProgress } from "src/providers/progress";
@@ -186,12 +188,8 @@ export default function CardLCNAF({ agent }) {
           {agent?.hasAffiliation && (
             <Grid item xs={6}>
               <Box sx={{ pl: "10px" }}>
-                <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
-                  Afiliação:
-                </Typography>
-                {agent?.hasAffiliation.map((affiliation, index) => (
-                  <CardAffiliation key={index} affiliation={affiliation} />
-                ))}
+              <HasAffiliation hasAffiliation={agent.hasAffiliation} />
+              
               </Box>
             </Grid>
           )}

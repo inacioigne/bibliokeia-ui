@@ -13,9 +13,8 @@ import {
   Grid,
   Button,
 } from "@mui/material";
+
 // React Icons
-import { FaTreeCity } from "react-icons/fa6";
-import { LiaBirthdayCakeSolid } from "react-icons/lia";
 import { FcCalendar } from "react-icons/fc";
 
 export default function CardAffiliation({ affiliation }) {

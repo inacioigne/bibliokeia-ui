@@ -1,9 +1,6 @@
 "use client";
 // MUI Components
-import {
-  Typography,
-  Box,
-} from "@mui/material";
+import { Typography, Box, Divider, Button } from "@mui/material";
 import TreeView from "@mui/lab/TreeView";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
@@ -14,6 +11,8 @@ import LogoWikidata from "src/components/logos/wikidata";
 import LogoWordcat from "src/components/logos/worldcat";
 import LogoGetty from "src/components/logos/getty";
 import LogoBne from "src/components/logos/bne";
+// React Icons
+import { FcCalendar } from "react-icons/fc";
 
 import Link from "next/link";
 
@@ -53,8 +52,6 @@ function StyledTreeItem(props) {
   const {
     bgColor,
     color,
-    labelIcon: LabelIcon,
-    // labelInfo,
     labelText,
     colorForDarkMode,
     bgColorForDarkMode,
@@ -79,7 +76,7 @@ function StyledTreeItem(props) {
           }}
         >
           <Box
-            component={LabelIcon} //color="inherit" sx={{ mr: 1 }}
+          // component={LabelIcon} color="inherit" sx={{ mr: 1 }}
           />
           <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
             {labelText}
@@ -92,19 +89,93 @@ function StyledTreeItem(props) {
   );
 }
 
-export default function HasCloseExternalAuthority({
-  hasCloseExternalAuthority,
-}) {
+function StyledTreeItemChild(props) {
+  const theme = useTheme();
+  const {
+    bgColor,
+    color,
+    labelText,
+    affiliationStart,
+    affiliationEnd,
+    colorForDarkMode,
+    bgColorForDarkMode,
+    ...other
+  } = props;
+
+  const styleProps = {
+    "--tree-view-color":
+      theme.palette.mode !== "dark" ? color : colorForDarkMode,
+    "--tree-view-bg-color":
+      theme.palette.mode !== "dark" ? bgColor : bgColorForDarkMode,
+  };
+  return (
+    <StyledTreeItemRoot
+      label={
+        <Box
+          sx={{
+            display: "flex",
+            // alignItems: "center",
+            flexDirection: "column",
+            p: 0.5,
+            pr: 0,
+          }}
+        >
+          <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
+            {labelText}
+          </Typography>
+          <Box sx={{ display: "flex" }}>
+          {affiliationStart && 
+          <Box sx={{ display: "flex", p: "5px" }}>
+            <Typography variant="caption" color="text.secondary" gutterBottom>
+              Início:
+            </Typography>
+            <Button
+              size="small"
+              variant="outlined"
+              startIcon={<FcCalendar />}
+              sx={{ ml: "5px", textTransform: "none", cursor: "auto" }}
+            >
+              {affiliationStart}
+           
+            </Button>
+          </Box>}
+          {affiliationEnd &&
+          <div>
+          <Divider orientation="vertical" flexItem />
+          <Box sx={{ display: "flex", p: "5px" }}>
+            <Typography variant="caption" color="text.secondary" gutterBottom>
+              Fim:
+            </Typography>
+            <Button
+              size="small"
+              variant="outlined"
+              startIcon={<FcCalendar />}
+              sx={{ ml: "5px", textTransform: "none", cursor: "auto" }}
+            >
+             {affiliationEnd}
+            </Button>
+          </Box></div>}
+          </Box>
+          <Divider />
+        </Box>
+      }
+      style={styleProps}
+      {...other}
+    />
+  );
+}
+
+export default function HasAffiliation({ hasAffiliation }) {
   const logos = {
     "www.wikidata.org": LogoWikidata,
     "id.worldcat.org": LogoWordcat,
     "vocab.getty.edu": LogoGetty,
-    "datos.bne.es": LogoBne
+    "datos.bne.es": LogoBne,
   };
 
   return (
     <TreeView
-      aria-label="gmail"
+      aria-label="hasAffiliation"
       defaultExpanded={["3"]}
       defaultCollapseIcon={<ArrowDropDownIcon />}
       defaultExpandIcon={<ArrowRightIcon />}
@@ -117,23 +188,22 @@ export default function HasCloseExternalAuthority({
     >
       <StyledTreeItem
         nodeId="3"
-        labelText="Ocorrências similares em outras bases" //labelIcon={Label}
+        labelText="Afiliação" //labelIcon={Label}
       >
-        {hasCloseExternalAuthority.map((authority, index) => (
-          <Link key={index} href={authority.value} target="_blank">
-             <StyledTreeItem
-              nodeId="5"
-              labelText={authority.label}
-              labelIcon={logos[authority.base]}
-              color="#1a73e8"
-              bgColor="#e8f0fe"
-              colorForDarkMode="#B8E7FB"
-              bgColorForDarkMode="#071318"
-            />
-          </Link>
+        {hasAffiliation.map((affiliation, index) => (
+          <StyledTreeItemChild
+          key={index}
+            nodeId="5"
+            labelText={affiliation.organization.label}
+            affiliationStart={affiliation?.affiliationStart}
+            affiliationEnd={affiliation?.affiliationEnd}
+            color="#1a73e8"
+            bgColor="#e8f0fe"
+            colorForDarkMode="#B8E7FB"
+            bgColorForDarkMode="#071318"
+          />
         ))}
       </StyledTreeItem>
     </TreeView>
   );
 }
- 

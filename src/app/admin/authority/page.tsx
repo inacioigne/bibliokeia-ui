@@ -28,7 +28,9 @@ import { PersonAdd, Home, Search } from "@mui/icons-material/";
 import { CiImport } from "react-icons/ci";
 import { VscNewFile } from "react-icons/vsc";
 
+// Nextjs Components
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 // BiblioKeia Components
 import BreadcrumbsBK from "src/components/nav/breadcrumbs";
@@ -41,8 +43,6 @@ import { useState, useEffect } from "react";
 import { solrAuthority } from "src/services/solrAuthority";
 
 
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
-
 const previousPaths = [
   {
     link: "/admin",
@@ -52,8 +52,7 @@ const previousPaths = [
 ];
 
 export default function Authority() {
-  const router = useRouter();
-  const pathname = usePathname();
+
   const searchParams = useSearchParams();
   const bkId = searchParams.get("id");
 
@@ -62,7 +61,7 @@ export default function Authority() {
   const [docs, setDocs] = useState([]);
   const [doc, setDoc] = useState(null);
 
-  const searchAuthority = (search) => {
+  const searchAuthority = (search: string) => {
     let params = {
       q: `label:${search}*`,
       fl: "*,[child]",
@@ -73,7 +72,7 @@ export default function Authority() {
       .get("select", {
         params: params,
       })
-      .then((response) => {
+      .then((response: any) => {
         setDocs(response.data.response.docs);
         console.log(response.data.response.docs);
       })
@@ -85,9 +84,7 @@ export default function Authority() {
     // });
   };
 
-  
-
-  const getDoc = (id) => {
+  const getDoc = (id: string) => {
     let params = {
       q: `id:${id}`,
       fl: "*,[child]",
@@ -111,8 +108,12 @@ export default function Authority() {
   };
 
   useEffect(() => {
-    getDoc(bkId);
-    console.log(bkId);
+    if (bkId) {
+      getDoc(bkId);
+      console.log(bkId);
+
+    } 
+    
   }, [bkId]);
 
   const handleChangeType = (event) => {
@@ -167,9 +168,9 @@ export default function Authority() {
                   variant="outlined"
                   value={search}
                   fullWidth
-                  onChange={(e) => {
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     setSearch(e.target.value);
-                    console.log(e.target.value);
+                    // console.log(e.target.value);
                     searchAuthority(e.target.value);
                   }}
                   InputProps={{
