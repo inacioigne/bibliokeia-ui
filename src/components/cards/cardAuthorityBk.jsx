@@ -21,15 +21,21 @@ import { FcCalendar } from "react-icons/fc";
 import { LiaEditSolid } from "react-icons/lia";
 import { BiTrash } from "react-icons/bi";
 
+// React Hooks
+import { useState } from "react"
+
 // BiblioKeia Components
 import BtnIcon from "src/components/buttons/btnIcon";
 import HasCloseExternalAuthority from "src/components/solr/hasCloseExternalAuthority";
+import AlertDialog from "src/components/modal/dialog"
 
 import { api } from "src/services/api";
 
 import Image from "next/image";
 
 export default function CardAuthorityBk({ doc }) {
+  const [open, setOpen] = useState(false);
+
 
   const deleteAuthority = (id, type) => {
     const data = {
@@ -48,6 +54,12 @@ export default function CardAuthorityBk({ doc }) {
       });
   };
 
+  const handleClose = () => {
+    let [type] = doc.type
+    deleteAuthority(doc.id, type)
+    setOpen(false);
+  };
+
   const imageStyle = {
     borderRadius: "15%",
     overflow: "hidden",
@@ -55,7 +67,8 @@ export default function CardAuthorityBk({ doc }) {
     marginLeft: "10px",
   };
   return (
-    <Card variant="outlined">
+    <>
+     <Card variant="outlined">
       <CardContent>
         <CardHeader
           avatar={
@@ -85,7 +98,8 @@ export default function CardAuthorityBk({ doc }) {
                   aria-label="settings"
                   onClick={() => {
                     let [type] = doc.type
-                    deleteAuthority(doc.id, type)
+                    setOpen(true);
+                    // deleteAuthority(doc.id, type)
                     
                     
                     console.log(doc.id, type)
@@ -118,9 +132,6 @@ export default function CardAuthorityBk({ doc }) {
               sx={{
                 position: "relative",
                 height: "150px",
-
-                // border: "solid",
-                // borderRadius: "20%",
               }}
             >
               <Image
@@ -229,5 +240,8 @@ export default function CardAuthorityBk({ doc }) {
         </Grid>
       </CardContent>
     </Card>
+    <AlertDialog open={open} setOpen={setOpen} handleClose={handleClose}/>
+    </>
+   
   );
 }
