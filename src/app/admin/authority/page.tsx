@@ -74,7 +74,7 @@ export default function Authority() {
       })
       .then((response: any) => {
         setDocs(response.data.response.docs);
-        console.log(response.data.response.docs);
+        // console.log(response.data.response.docs);
       })
       .catch(function (error) {
         console.log("ERROOO!!", error);
@@ -100,7 +100,7 @@ export default function Authority() {
       })
       .then(([doc]) => {
         setDoc(doc);
-        console.log(doc);
+        // console.log(doc);
       })
       .catch(function (error) {
         console.log("ERROOO!!", error);
@@ -170,7 +170,6 @@ export default function Authority() {
                   fullWidth
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     setSearch(e.target.value);
-                    // console.log(e.target.value);
                     searchAuthority(e.target.value);
                   }}
                   InputProps={{
@@ -201,7 +200,7 @@ export default function Authority() {
                           <ListItemButton
                             onClick={() => {
                               getDoc(doc.id);
-                              console.log(doc.id);
+                              // console.log(doc.id);
                             }}
                           >
                             <ListItemIcon>
@@ -243,7 +242,7 @@ export default function Authority() {
           </Box>
         </Grid>
         <Grid item xs={7} sx={{ mt: "15px" }}>
-          {doc && <CardAuthorityBk doc={doc} />}
+          {doc && <CardAuthorityBk doc={doc} setDoc={setDoc} setSearch={setSearch} />}
         </Grid>
       </Grid>
     </Container>

@@ -75,9 +75,7 @@ function StyledTreeItem(props) {
             pr: 0,
           }}
         >
-          <Box
-          // component={LabelIcon} color="inherit" sx={{ mr: 1 }}
-          />
+          <Box />
           <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
             {labelText}
           </Typography>
@@ -166,17 +164,12 @@ function StyledTreeItemChild(props) {
 }
 
 export default function HasAffiliation({ hasAffiliation }) {
-  // const logos = {
-  //   "www.wikidata.org": LogoWikidata,
-  //   "id.worldcat.org": LogoWordcat,
-  //   "vocab.getty.edu": LogoGetty,
-  //   "datos.bne.es": LogoBne,
-  // };
+  
 
   return (
     <TreeView
       aria-label="hasAffiliation"
-      defaultExpanded={["3"]}
+      defaultExpanded={[""]}
       defaultCollapseIcon={<ArrowDropDownIcon />}
       defaultExpandIcon={<ArrowRightIcon />}
       defaultEndIcon={<div style={{ width: 24 }} />}
@@ -190,11 +183,23 @@ export default function HasAffiliation({ hasAffiliation }) {
         nodeId="3"
         labelText="Afiliação" 
       >
-        {hasAffiliation.map((affiliation, index) => (
+        { typeof hasAffiliation == "object" ? (
+          <StyledTreeItemChild
+            nodeId="5"
+            labelText={hasAffiliation.organization}
+            affiliationStart={hasAffiliation?.affiliationStart}
+            affiliationEnd={hasAffiliation?.affiliationEnd}
+            color="#1a73e8"
+            bgColor="#e8f0fe"
+            colorForDarkMode="#B8E7FB"
+            bgColorForDarkMode="#071318"
+          />
+        ) : 
+          hasAffiliation.map((affiliation, index) => (
           <StyledTreeItemChild
           key={index}
             nodeId="5"
-            labelText={affiliation.organization.label}
+            labelText={affiliation.organization}
             affiliationStart={affiliation?.affiliationStart}
             affiliationEnd={affiliation?.affiliationEnd}
             color="#1a73e8"
@@ -202,7 +207,7 @@ export default function HasAffiliation({ hasAffiliation }) {
             colorForDarkMode="#B8E7FB"
             bgColorForDarkMode="#071318"
           />
-        ))}
+        )) }
       </StyledTreeItem>
     </TreeView>
   );

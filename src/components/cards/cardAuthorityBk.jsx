@@ -27,17 +27,30 @@ import { useState } from "react"
 // BiblioKeia Components
 import BtnIcon from "src/components/buttons/btnIcon";
 import HasCloseExternalAuthority from "src/components/solr/hasCloseExternalAuthority";
+import HasAffiliation from "src/components/solr/hasAffiliation";
 import AlertDialog from "src/components/modal/dialog"
 
 import { api } from "src/services/api";
 
 import Image from "next/image";
 
-export default function CardAuthorityBk({ doc }) {
+// BiblioKeia Hooks
+import { useProgress } from "src/providers/progress";
+import { useAlert } from "src/providers/alerts";
+
+export default function CardAuthorityBk({ doc, setDoc, setSearch }) {
+
+  const { setProgress } = useProgress();
+  const {
+    setOpenSnack,
+    setMessage,
+    setTypeAlert,
+  } = useAlert();
+
   const [open, setOpen] = useState(false);
 
-
   const deleteAuthority = (id, type) => {
+    setProgress(true);
     const data = {
       "id": id,
       "type": type
@@ -48,9 +61,20 @@ export default function CardAuthorityBk({ doc }) {
       })
       .then((response) => {
         console.log(response);
+        setTypeAlert("success");
+        setMessage("Registro excluido com sucesso");
+        setOpenSnack(true);
+        setDoc(false)
+        setSearch("")
       })
       .catch(function (error) {
         console.log("ERROOO!!", error);
+        setTypeAlert("error");
+          setMessage(error.response.data.detail);
+          setOpenSnack(true);
+      })
+      .finally(function () {
+        setProgress(false);
       });
   };
 
@@ -58,6 +82,7 @@ export default function CardAuthorityBk({ doc }) {
     let [type] = doc.type
     deleteAuthority(doc.id, type)
     setOpen(false);
+    console.log(doc.id)
   };
 
   const imageStyle = {
@@ -66,6 +91,7 @@ export default function CardAuthorityBk({ doc }) {
     objectFit: "scale-down",
     marginLeft: "10px",
   };
+
   return (
     <>
      <Card variant="outlined">
@@ -102,7 +128,7 @@ export default function CardAuthorityBk({ doc }) {
                     // deleteAuthority(doc.id, type)
                     
                     
-                    console.log(doc.id, type)
+                    // console.log(doc.id, type)
                   }}
                 >
                   <BiTrash />
@@ -127,7 +153,8 @@ export default function CardAuthorityBk({ doc }) {
             </Grid>
           )}
           {/* Imagem */}
-          <Grid item xs={2}>
+          { doc?.imagem && (
+            <Grid item xs={2}>
             <Box
               sx={{
                 position: "relative",
@@ -136,6 +163,8 @@ export default function CardAuthorityBk({ doc }) {
             >
               <Image
                 src={`${doc?.imagem}`}
+                // height={120}
+                // width={80}
                 fill={true}
                 sizes="(max-height: 200px) 100vw, (max-width: 200px) 100vw, (max-width: 100px) 50vw, 33vw"
                 alt="Picture of the author"
@@ -143,6 +172,9 @@ export default function CardAuthorityBk({ doc }) {
               />
             </Box>
           </Grid>
+
+          )}
+         
 
           {/* Nascimento */}
           {(doc?.birthPlace || doc?.birthDate) && (
@@ -170,6 +202,7 @@ export default function CardAuthorityBk({ doc }) {
               </Box>
             </Grid>
           )}
+
           {/* Falecimento */}
           {(doc?.deathPlace || doc?.deathDate) && (
             <Grid item xs={5}>
@@ -196,6 +229,7 @@ export default function CardAuthorityBk({ doc }) {
               </Box>
             </Grid>
           )}
+
           {/* hasVariant */}
           {doc?.variant && (
             <Grid item xs={6}>
@@ -229,6 +263,15 @@ export default function CardAuthorityBk({ doc }) {
               </Box>
             </Grid>
           )}
+
+          {/* hasAffiliation */}
+          {doc?.hasAffiliation && (
+            <Grid item xs={6}>
+            <HasAffiliation hasAffiliation={doc.hasAffiliation} />
+            </Grid>
+
+          )}
+
           {/* hasCloseExternalAuthority */}
           {doc?.hasCloseExternalAuthority && (
             <Grid item xs={6}>
@@ -237,6 +280,7 @@ export default function CardAuthorityBk({ doc }) {
               />
             </Grid>
           )}
+
         </Grid>
       </CardContent>
     </Card>

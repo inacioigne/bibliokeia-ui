@@ -89,12 +89,12 @@ function StyledTreeItem(props) {
 export default function HasCloseExternalAuthority({
   hasCloseExternalAuthority,
 }) {
-    const logos = {
-        "www.wikidata.org": LogoWikidata,
-        "id.worldcat.org": LogoWordcat,
-        "vocab.getty.edu": LogoGetty,
-        "datos.bne.es": LogoBne
-      };
+  const logos = {
+    "www.wikidata.org": LogoWikidata,
+    "id.worldcat.org": LogoWordcat,
+    "vocab.getty.edu": LogoGetty,
+    "datos.bne.es": LogoBne,
+  };
   return (
     <TreeView
       aria-label="gmail"
@@ -112,19 +112,31 @@ export default function HasCloseExternalAuthority({
         nodeId="3"
         labelText="Ocorrências similares em outras bases"
       >
-        {hasCloseExternalAuthority.map((authority, index) => (
-          <Link key={index} href={"#"} target="_blank">
-             <StyledTreeItem
-              nodeId="5"
-              labelText={authority.label}
-              labelIcon={logos[authority.base]}
-              color="#1a73e8"
-              bgColor="#e8f0fe"
-              colorForDarkMode="#B8E7FB"
-              bgColorForDarkMode="#071318"
-            />
-          </Link>
-        ))}
+        {typeof hasCloseExternalAuthority == "object" ? (
+          <StyledTreeItem
+            nodeId="5"
+            labelText={hasCloseExternalAuthority.label}
+            labelIcon={logos[hasCloseExternalAuthority.base]}
+            color="#1a73e8"
+            bgColor="#e8f0fe"
+            colorForDarkMode="#B8E7FB"
+            bgColorForDarkMode="#071318"
+          />
+        ) : (
+          hasCloseExternalAuthority.map((authority, index) => (
+            <Link key={index} href={"#"} target="_blank">
+              <StyledTreeItem
+                nodeId="5"
+                labelText={authority.label}
+                labelIcon={logos[authority.base]}
+                color="#1a73e8"
+                bgColor="#e8f0fe"
+                colorForDarkMode="#B8E7FB"
+                bgColorForDarkMode="#071318"
+              />
+            </Link>
+          ))
+        )}
       </StyledTreeItem>
     </TreeView>
   );

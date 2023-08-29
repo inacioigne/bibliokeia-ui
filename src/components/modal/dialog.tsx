@@ -29,5 +29,5 @@ export default function AlertDialog({ open, setOpen, handleClose }) {
         </Button>
       </DialogActions>
     </Dialog>
-  );
+  ); 
 }

@@ -44,13 +44,10 @@ import { convertToObject } from "typescript";
 
 export default function CardLCNAF({ agent }) {
   const router = useRouter()
-  const { progress, setProgress, initProgress } = useProgress();
+  const { setProgress } = useProgress();
   const {
-    // openSnack,
     setOpenSnack,
-    // message,
     setMessage,
-    // typeAlert,
     setTypeAlert,
   } = useAlert();
 
@@ -76,8 +73,6 @@ export default function CardLCNAF({ agent }) {
       })
       .finally(function () {
         setProgress(false);
-        
-
       });
   };
   return (
